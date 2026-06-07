@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Field } from "../../components/Modal";
+import PoweredBy from "../../components/PoweredBy";
 import RegisterScreen from "./RegisterScreen";
 
 export default function LoginScreen({ onLogin, onRegister }) {
@@ -80,6 +81,8 @@ export default function LoginScreen({ onLogin, onRegister }) {
             {loading ? "Подождите" : isRegister ? "Зарегистрироваться" : "Войти"}
           </button>
         </form>
+
+        <PoweredBy className="mt-6" />
       </div>
     </main>
   );

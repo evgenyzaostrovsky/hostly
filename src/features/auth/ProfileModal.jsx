@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { KeyRound, Phone, ShieldCheck, UserRound } from "lucide-react";
 import Modal, { Field, Info } from "../../components/Modal";
+import PoweredBy from "../../components/PoweredBy";
 import { changeEmployeePassword, getRoleLabel } from "./authApi";
 
 export default function ProfileModal({ employee, onClose, onRequestLogout }) {
@@ -69,6 +70,8 @@ export default function ProfileModal({ employee, onClose, onRequestLogout }) {
         <button type="button" onClick={onRequestLogout} className="w-full rounded-xl bg-red-950/70 py-3 font-bold text-red-100 ring-1 ring-red-500/30 md:hidden">
           Выйти
         </button>
+
+        <PoweredBy />
       </div>
     </Modal>
   );

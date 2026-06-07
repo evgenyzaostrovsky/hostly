@@ -5,6 +5,7 @@ import TableCard from "../components/TableCard";
 import ScheduleGrid from "../components/ScheduleGrid";
 import { DateButtonMobile } from "../components/CalendarPopover";
 import { ConfirmDialog } from "../components/Modal";
+import PoweredBy from "../components/PoweredBy";
 import LoginScreen from "../features/auth/LoginScreen";
 import { getCurrentEmployee, loginEmployee, logoutEmployee, registerEmployee } from "../features/auth/authApi";
 import ProfileModal from "../features/auth/ProfileModal";
@@ -361,6 +362,7 @@ function StartupErrorScreen({ error, onRetry }) {
         <button type="button" onClick={onRetry} className="mt-6 w-full rounded-xl bg-violet-600 py-3 font-bold text-white shadow-glow">
           Повторить
         </button>
+        <PoweredBy className="mt-6" />
       </div>
     </main>
   );
@@ -383,6 +385,7 @@ function MissingSupabaseConfig() {
             <div>VITE_AUTH_EMAIL_DOMAIN</div>
           </div>
         </div>
+        <PoweredBy className="mt-6" />
       </div>
     </main>
   );
