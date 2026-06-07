@@ -1,8 +1,8 @@
 export const DAY_START = 12;
-export const DAY_END = 24;
+export const DAY_END = 25;
 export const DEFAULT_BOOKING_MINUTES = 120;
 export const HOURS = Array.from({ length: DAY_END - DAY_START + 1 }, (_, i) => DAY_START + i);
-export const TIME_OPTIONS = Array.from({ length: 28 }, (_, index) => {
+export const TIME_OPTIONS = Array.from({ length: (DAY_END - DAY_START) * 2 + 1 }, (_, index) => {
   const totalMinutes = DAY_START * 60 + index * 30;
   const hour = Math.floor(totalMinutes / 60) % 24;
   const minute = totalMinutes % 60;
@@ -36,7 +36,7 @@ export function getDurationLabel(start, end) {
 }
 
 export function prettyHour(hour) {
-  return `${hour === 24 ? "00" : String(hour).padStart(2, "0")}:00`;
+  return `${String(hour % 24).padStart(2, "0")}:00`;
 }
 
 export function toIsoDate(date) {
@@ -111,7 +111,7 @@ export function getNowMinutes(selectedDate) {
 }
 
 export function roundUpToSlot(minutes) {
-  return Math.min(Math.ceil(minutes / 30) * 30, (DAY_END + 1) * 60 - DEFAULT_BOOKING_MINUTES);
+  return Math.min(Math.ceil(minutes / 30) * 30, DAY_END * 60 - DEFAULT_BOOKING_MINUTES);
 }
 
 export function getActualNowTime() {
@@ -120,8 +120,5 @@ export function getActualNowTime() {
 }
 
 export function getScheduleStartHour(selectedDate) {
-  if (!isToday(selectedDate)) return DAY_START;
-
-  const now = new Date();
-  return Math.min(Math.max(now.getHours(), DAY_START), DAY_END);
+  return DAY_START;
 }

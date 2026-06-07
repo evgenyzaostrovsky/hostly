@@ -5,9 +5,10 @@ import { getTableState, reservationTone } from "../features/tables/tableUtils";
 export default function ScheduleGrid({ tables, reservations, selectedDate, openTable, onReservation }) {
   const startHour = getScheduleStartHour(selectedDate);
   const hours = Array.from({ length: DAY_END - startHour + 1 }, (_, index) => startHour + index);
+  const intervalCount = hours.length - 1;
   const hourWidth = 76;
   const tableColumnWidth = 116;
-  const timelineWidth = hours.length * hourWidth;
+  const timelineWidth = intervalCount * hourWidth;
   const totalWidth = tableColumnWidth + timelineWidth;
 
   return (
@@ -16,12 +17,13 @@ export default function ScheduleGrid({ tables, reservations, selectedDate, openT
         <div style={{ minWidth: `${totalWidth}px` }}>
           <div className="sticky top-0 z-[5] grid border-b border-white/8 bg-[#0c121b] text-sm text-slate-300" style={{ gridTemplateColumns: `${tableColumnWidth}px ${timelineWidth}px` }}>
             <div className="sticky left-0 z-[6] border-r border-white/8 bg-[#0c121b] px-4 py-3">Стол</div>
-            <div className="grid bg-[#0c121b]" style={{ gridTemplateColumns: `repeat(${hours.length}, ${hourWidth}px)` }}>
-              {hours.map((hour) => (
+            <div className="relative grid bg-[#0c121b]" style={{ gridTemplateColumns: `repeat(${intervalCount}, ${hourWidth}px)` }}>
+              {hours.slice(0, -1).map((hour) => (
                 <div key={hour} className="border-l border-white/8 px-2 py-3">
                   {prettyHour(hour)}
                 </div>
               ))}
+              <span className="absolute right-2 top-3 text-sm text-slate-300">{prettyHour(hours[hours.length - 1])}</span>
             </div>
           </div>
           {tables.map((table) => (
@@ -30,18 +32,18 @@ export default function ScheduleGrid({ tables, reservations, selectedDate, openT
                 <StatusDot tone={getTableState(table.id, reservations, selectedDate).tone} />
                 <span className="block font-semibold">{table.id} стол</span>
               </button>
-              <div className="relative grid bg-grid" style={{ gridTemplateColumns: `repeat(${hours.length}, ${hourWidth}px)` }}>
-                {hours.map((hour) => <div key={hour} className="border-l border-white/7" />)}
+              <div className="relative grid bg-grid" style={{ gridTemplateColumns: `repeat(${intervalCount}, ${hourWidth}px)` }}>
+                {hours.slice(0, -1).map((hour) => <div key={hour} className="border-l border-white/7" />)}
                 {reservations
                   .filter((item) => item.tableId === table.id)
-                  .filter((item) => timeToMinutes(item.end) > startHour * 60)
+                  .filter((item) => timeToMinutes(item.end) > startHour * 60 && timeToMinutes(item.start) < DAY_END * 60)
                   .map((item) => (
                     <ReservationBlock
                       key={item.id}
                       reservation={item}
                       compact
                       startHour={startHour}
-                      visibleHours={hours.length}
+                      visibleHours={intervalCount}
                       onClick={() => onReservation(item)}
                     />
                   ))}
