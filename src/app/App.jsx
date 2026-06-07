@@ -18,6 +18,17 @@ import { addDays, getActualNowTime, toIsoDate } from "../lib/dateTime";
 import { hasSupabaseConfig, isProductionWithoutSupabase, supabase } from "../lib/supabase";
 import { fetchReservations, insertReservation, removeReservation, saveReservation, subscribeReservations } from "../lib/reservationsApi";
 
+const STARTUP_TIMEOUT_MS = 8000;
+
+function withTimeout(promise, message, timeout = STARTUP_TIMEOUT_MS) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      window.setTimeout(() => reject(new Error(message)), timeout);
+    }),
+  ]);
+}
+
 export default function App() {
   const [mode, setMode] = useState("tile");
   const [screen, setScreen] = useState("home");
@@ -33,6 +44,8 @@ export default function App() {
   const [appError, setAppError] = useState("");
   const [showProfile, setShowProfile] = useState(false);
   const [confirmLogout, setConfirmLogout] = useState(false);
+  const [startupError, setStartupError] = useState("");
+  const [startupRetry, setStartupRetry] = useState(0);
 
   useEffect(() => {
     if (!hasSupabaseConfig) return undefined;
@@ -41,24 +54,44 @@ export default function App() {
 
     async function loadSession() {
       setAuthLoading(true);
-      const { data } = await supabase.auth.getSession();
-      const user = data.session?.user || null;
+      setStartupError("");
 
-      if (!mounted) return;
+      try {
+        const { data } = await withTimeout(
+          supabase.auth.getSession(),
+          "Не удалось быстро подключиться к Supabase. Проверь интернет и попробуй еще раз.",
+        );
+        const user = data.session?.user || null;
 
-      setAuthUser(user);
+        if (!mounted) return;
 
-      if (user) {
-        await loadEmployee(user.id);
+        setAuthUser(user);
+
+        if (user) {
+          await withTimeout(
+            loadEmployee(user.id),
+            "Не удалось загрузить профиль сотрудника. Проверь интернет и попробуй еще раз.",
+          );
+        }
+      } catch (error) {
+        if (mounted) {
+          setStartupError(error.message);
+          setAuthUser(null);
+          setEmployee(null);
+        }
+      } finally {
+        if (mounted) setAuthLoading(false);
       }
-
-      setAuthLoading(false);
     }
 
     const { data: listener } = supabase.auth.onAuthStateChange(async (_event, session) => {
       const user = session?.user || null;
       setAuthUser(user);
-      setEmployee(user ? await getCurrentEmployee(user.id) : null);
+      try {
+        setEmployee(user ? await getCurrentEmployee(user.id) : null);
+      } catch (error) {
+        setAppError(error.message);
+      }
     });
 
     loadSession();
@@ -67,7 +100,7 @@ export default function App() {
       mounted = false;
       listener.subscription.unsubscribe();
     };
-  }, []);
+  }, [startupRetry]);
 
   useEffect(() => {
     if (!hasSupabaseConfig || !authUser) return undefined;
@@ -226,6 +259,10 @@ export default function App() {
     );
   }
 
+  if (startupError) {
+    return <StartupErrorScreen error={startupError} onRetry={() => setStartupRetry((value) => value + 1)} />;
+  }
+
   if (hasSupabaseConfig && !authUser) {
     return <LoginScreen onLogin={handleLogin} onRegister={handleRegister} />;
   }
@@ -309,6 +346,21 @@ export default function App() {
             {appError}
           </div>
         )}
+      </div>
+    </main>
+  );
+}
+
+function StartupErrorScreen({ error, onRetry }) {
+  return (
+    <main className="grid min-h-screen place-items-center bg-[#070a11] px-4 text-slate-100">
+      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#101722] p-6 text-center shadow-2xl shadow-black/40">
+        <div className="text-2xl font-semibold tracking-[0.18em]">REDWOOD<span className="mx-1 text-violet-300">*</span></div>
+        <h1 className="mt-6 text-xl font-bold">Не удалось загрузить приложение</h1>
+        <p className="mt-3 text-sm leading-6 text-slate-400">{error}</p>
+        <button type="button" onClick={onRetry} className="mt-6 w-full rounded-xl bg-violet-600 py-3 font-bold text-white shadow-glow">
+          Повторить
+        </button>
       </div>
     </main>
   );

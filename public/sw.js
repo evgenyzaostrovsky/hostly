@@ -1,8 +1,8 @@
-const CACHE_NAME = "redwood-shell-v1";
-const APP_SHELL = ["/", "/manifest.webmanifest", "/icons/icon.svg"];
+const CACHE_NAME = "redwood-assets-v2";
+const APP_ASSETS = ["/manifest.webmanifest", "/icons/icon.svg"];
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)));
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_ASSETS)));
   self.skipWaiting();
 });
 
@@ -20,8 +20,9 @@ self.addEventListener("fetch", (event) => {
 
   if (request.method !== "GET") return;
   if (new URL(request.url).origin !== self.location.origin) return;
+  if (request.mode === "navigate") return;
 
   event.respondWith(
-    fetch(request).catch(() => caches.match(request).then((cached) => cached || caches.match("/"))),
+    fetch(request).catch(() => caches.match(request)),
   );
 });
