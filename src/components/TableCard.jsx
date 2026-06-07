@@ -1,8 +1,10 @@
 import React from "react";
 import { getTableState, toneClasses } from "../features/tables/tableUtils";
+import { isToday } from "../lib/dateTime";
 
 export default function TableCard({ table, reservations, selectedDate, openTable }) {
   const state = getTableState(table.id, reservations, selectedDate);
+  const emptyDateLabel = isToday(selectedDate) ? "Сегодня" : "На дату";
 
   return (
     <button
@@ -23,7 +25,7 @@ export default function TableCard({ table, reservations, selectedDate, openTable
             </>
           ) : (
             <>
-              <span className="block">Сегодня</span>
+              <span className="block">{emptyDateLabel}</span>
               <span className="block">броней нет</span>
             </>
           )}

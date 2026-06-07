@@ -1,4 +1,4 @@
-import { getNowMinutes, isToday, timeToMinutes } from "../../lib/dateTime";
+import { DAY_START, getNowMinutes, isPastDate, isToday, timeToMinutes } from "../../lib/dateTime";
 
 const tableIds = [
   ...Array.from({ length: 15 }, (_, index) => index + 1),
@@ -13,22 +13,24 @@ export const initialTables = tableIds.map((id) => ({
 }));
 
 export function getTableState(tableId, reservations, selectedDate) {
-  const now = getNowMinutes(selectedDate);
+  const today = isToday(selectedDate);
+  const past = isPastDate(selectedDate);
+  const now = today ? getNowMinutes(selectedDate) : DAY_START * 60;
   const tableReservations = reservations
     .filter((item) => item.tableId === tableId)
     .sort((a, b) => timeToMinutes(a.start) - timeToMinutes(b.start));
   const currentBusy = tableReservations.find((item) => {
     const start = timeToMinutes(item.start);
     const end = timeToMinutes(item.end);
-    return item.status === "busy" && isToday(selectedDate) && now >= start && now < end;
+    return item.status === "busy" && today && now >= start && now < end;
   });
-  const next = tableReservations.find((item) => timeToMinutes(item.start) >= now);
+  const next = past ? null : tableReservations.find((item) => timeToMinutes(item.start) >= now);
 
   if (currentBusy) {
     return { tone: "busy", label: "Занят", next };
   }
 
-  if (next && timeToMinutes(next.start) - now <= 120) {
+  if (today && next && timeToMinutes(next.start) - now <= 120) {
     return { tone: "soon", label: "До брони менее 2 часов", next };
   }
 
@@ -49,4 +51,3 @@ export function reservationTone(status) {
   if (status === "soon") return "bg-orange-800/95 border-orange-500 text-orange-50";
   return "bg-emerald-900/95 border-emerald-600 text-emerald-50";
 }
-
