@@ -31,7 +31,7 @@ function withTimeout(promise, message, timeout = STARTUP_TIMEOUT_MS) {
 }
 
 export default function App() {
-  const [mode, setMode] = useState("tile");
+  const [mode, setMode] = useState("schedule");
   const [screen, setScreen] = useState("home");
   const [selectedTableId, setSelectedTableId] = useState(3);
   const [selectedDate, setSelectedDate] = useState(toIsoDate(new Date()));
@@ -425,7 +425,7 @@ function TileMode({ tables, reservations, selectedDate, setSelectedDate, openTab
           <Filter size={21} />
         </button>
       </div>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+      <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
         {tables.map((table) => (
           <TableCard key={table.id} table={table} reservations={reservations} selectedDate={selectedDate} openTable={openTable} />
         ))}

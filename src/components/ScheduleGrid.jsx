@@ -14,13 +14,13 @@ export default function ScheduleGrid({ tables, reservations, selectedDate, openT
     <div className="relative z-0 max-h-[calc(100vh-172px)] overflow-auto rounded-lg border border-white/8 bg-[#0c121b] shadow-2xl shadow-black/35 md:max-h-none">
       <div className="overflow-visible">
         <div style={{ minWidth: `${totalWidth}px` }}>
-          <div className="grid border-b border-white/8 text-sm text-slate-300" style={{ gridTemplateColumns: `${tableColumnWidth}px ${timelineWidth}px` }}>
-            <div className="sticky left-0 z-[3] border-r border-white/8 bg-[#0c121b] px-4 py-3">Стол</div>
-            <div className="grid" style={{ gridTemplateColumns: `repeat(${hours.length}, ${hourWidth}px)` }}>
+          <div className="sticky top-0 z-[5] grid border-b border-white/8 bg-[#0c121b] text-sm text-slate-300" style={{ gridTemplateColumns: `${tableColumnWidth}px ${timelineWidth}px` }}>
+            <div className="sticky left-0 z-[6] border-r border-white/8 bg-[#0c121b] px-4 py-3">Стол</div>
+            <div className="grid bg-[#0c121b]" style={{ gridTemplateColumns: `repeat(${hours.length}, ${hourWidth}px)` }}>
               {hours.map((hour) => (
                 <div key={hour} className="border-l border-white/8 px-2 py-3">
-                {prettyHour(hour)}
-              </div>
+                  {prettyHour(hour)}
+                </div>
               ))}
             </div>
           </div>
