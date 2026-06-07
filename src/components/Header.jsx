@@ -11,7 +11,7 @@ export default function Header({ mode, setMode, selectedDate, setSelectedDate, e
         <button className="icon-btn" aria-label="Меню">
           <Menu size={24} />
         </button>
-        <h1 className="mr-auto text-2xl font-semibold tracking-[0.18em] text-slate-100">REDWOOD<span className="mx-1 text-violet-300">*</span></h1>
+        <h1 className="mr-auto text-2xl font-semibold tracking-[0.18em] text-slate-100">LAZYBOOK<span className="mx-1 text-violet-300">*</span></h1>
         <button className="icon-btn hidden md:grid" aria-label="Предыдущий день" onClick={() => setSelectedDate(addDays(selectedDate, -1))}>
           <ChevronLeft size={22} />
         </button>

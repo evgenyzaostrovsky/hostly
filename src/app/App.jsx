@@ -252,7 +252,7 @@ export default function App() {
     return (
       <main className="grid min-h-screen place-items-center bg-[#070a11] px-6 text-slate-100">
         <div className="text-center">
-          <div className="text-2xl font-semibold tracking-[0.18em]">REDWOOD<span className="mx-1 text-violet-300">*</span></div>
+          <div className="text-2xl font-semibold tracking-[0.18em]">LAZYBOOK<span className="mx-1 text-violet-300">*</span></div>
           <p className="mt-3 text-sm text-slate-400">Загружаем смену</p>
         </div>
       </main>
@@ -355,7 +355,7 @@ function StartupErrorScreen({ error, onRetry }) {
   return (
     <main className="grid min-h-screen place-items-center bg-[#070a11] px-4 text-slate-100">
       <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#101722] p-6 text-center shadow-2xl shadow-black/40">
-        <div className="text-2xl font-semibold tracking-[0.18em]">REDWOOD<span className="mx-1 text-violet-300">*</span></div>
+        <div className="text-2xl font-semibold tracking-[0.18em]">LAZYBOOK<span className="mx-1 text-violet-300">*</span></div>
         <h1 className="mt-6 text-xl font-bold">Не удалось загрузить приложение</h1>
         <p className="mt-3 text-sm leading-6 text-slate-400">{error}</p>
         <button type="button" onClick={onRetry} className="mt-6 w-full rounded-xl bg-violet-600 py-3 font-bold text-white shadow-glow">
@@ -370,7 +370,7 @@ function MissingSupabaseConfig() {
   return (
     <main className="grid min-h-screen place-items-center bg-[#070a11] px-4 text-slate-100">
       <div className="w-full max-w-lg rounded-2xl border border-red-500/30 bg-[#101722] p-6 shadow-2xl shadow-black/40">
-        <div className="text-2xl font-semibold tracking-[0.18em]">REDWOOD<span className="mx-1 text-violet-300">*</span></div>
+        <div className="text-2xl font-semibold tracking-[0.18em]">LAZYBOOK<span className="mx-1 text-violet-300">*</span></div>
         <h1 className="mt-6 text-2xl font-bold">Supabase не подключен</h1>
         <p className="mt-3 text-sm leading-6 text-slate-300">
           На production-деплое не заданы переменные окружения. Приложение остановлено, чтобы не работать на моковых данных.

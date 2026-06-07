@@ -35,7 +35,7 @@ export default function LoginScreen({ onLogin, onRegister }) {
     <main className="min-h-screen bg-[#070a11] px-4 py-8 text-slate-100">
       <div className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-md flex-col justify-center">
         <div className="mb-8">
-          <div className="text-3xl font-semibold tracking-[0.2em]">REDWOOD<span className="mx-1 text-violet-300">*</span></div>
+          <div className="text-3xl font-semibold tracking-[0.2em]">LAZYBOOK<span className="mx-1 text-violet-300">*</span></div>
           <p className="mt-3 text-sm text-slate-400">Вход для сотрудников зала</p>
         </div>
 

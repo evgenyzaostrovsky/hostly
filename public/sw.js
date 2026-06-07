@@ -1,4 +1,4 @@
-const CACHE_NAME = "redwood-assets-v2";
+const CACHE_NAME = "lazybook-assets-v1";
 const APP_ASSETS = ["/manifest.webmanifest", "/icons/icon.svg"];
 
 self.addEventListener("install", (event) => {

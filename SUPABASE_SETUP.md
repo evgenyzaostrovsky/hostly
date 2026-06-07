@@ -1,4 +1,4 @@
-# Supabase setup for REDWOOD
+# Supabase setup for LAZYBOOK
 
 ## 1. Project URL
 
@@ -50,4 +50,3 @@ For live updates between phones:
 3. Enable Realtime for the `reservations` table.
 
 Even without Realtime, the app can still read and write bookings after reload.
-

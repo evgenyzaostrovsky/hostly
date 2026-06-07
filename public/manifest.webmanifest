@@ -1,7 +1,7 @@
 {
-  "name": "REDWOOD Booking",
-  "short_name": "REDWOOD",
-  "description": "Бронирование столов REDWOOD",
+  "name": "LAZYBOOK",
+  "short_name": "LAZYBOOK",
+  "description": "Бронирование столов LAZYBOOK",
   "lang": "ru",
   "start_url": "/",
   "scope": "/",

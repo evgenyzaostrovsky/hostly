@@ -31,7 +31,7 @@ export default function ProfileModal({ employee, onClose, onRequestLogout }) {
       <div className="space-y-4">
         <div>
           <h2 className="text-2xl font-bold">Личный кабинет</h2>
-          <p className="mt-1 text-sm text-slate-400">Профиль сотрудника REDWOOD</p>
+          <p className="mt-1 text-sm text-slate-400">Профиль сотрудника LAZYBOOK</p>
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
