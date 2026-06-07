@@ -15,7 +15,7 @@ import { getReservationConflict } from "../features/reservations/reservationUtil
 import TableDetails from "../features/tables/TableDetails";
 import { initialTables } from "../features/tables/tableUtils";
 import { addDays, getActualNowTime, toIsoDate } from "../lib/dateTime";
-import { hasSupabaseConfig, supabase } from "../lib/supabase";
+import { hasSupabaseConfig, isProductionWithoutSupabase, supabase } from "../lib/supabase";
 import { fetchReservations, insertReservation, removeReservation, saveReservation, subscribeReservations } from "../lib/reservationsApi";
 
 export default function App() {
@@ -23,7 +23,7 @@ export default function App() {
   const [screen, setScreen] = useState("home");
   const [selectedTableId, setSelectedTableId] = useState(3);
   const [selectedDate, setSelectedDate] = useState(toIsoDate(new Date()));
-  const [reservations, setReservations] = useState(seedReservations);
+  const [reservations, setReservations] = useState(hasSupabaseConfig ? [] : seedReservations);
   const [booking, setBooking] = useState(null);
   const [viewedReservation, setViewedReservation] = useState(null);
   const [authLoading, setAuthLoading] = useState(hasSupabaseConfig);
@@ -211,6 +211,10 @@ export default function App() {
     setShowProfile(false);
   }
 
+  if (isProductionWithoutSupabase) {
+    return <MissingSupabaseConfig />;
+  }
+
   if (authLoading) {
     return (
       <main className="grid min-h-screen place-items-center bg-[#070a11] px-6 text-slate-100">
@@ -305,6 +309,28 @@ export default function App() {
             {appError}
           </div>
         )}
+      </div>
+    </main>
+  );
+}
+
+function MissingSupabaseConfig() {
+  return (
+    <main className="grid min-h-screen place-items-center bg-[#070a11] px-4 text-slate-100">
+      <div className="w-full max-w-lg rounded-2xl border border-red-500/30 bg-[#101722] p-6 shadow-2xl shadow-black/40">
+        <div className="text-2xl font-semibold tracking-[0.18em]">REDWOOD<span className="mx-1 text-violet-300">*</span></div>
+        <h1 className="mt-6 text-2xl font-bold">Supabase не подключен</h1>
+        <p className="mt-3 text-sm leading-6 text-slate-300">
+          На production-деплое не заданы переменные окружения. Приложение остановлено, чтобы не работать на моковых данных.
+        </p>
+        <div className="mt-5 rounded-xl bg-white/[.045] p-4 text-sm text-slate-300 ring-1 ring-white/10">
+          <div className="font-bold text-white">Добавь в Vercel:</div>
+          <div className="mt-3 space-y-1 font-mono text-xs">
+            <div>VITE_SUPABASE_URL</div>
+            <div>VITE_SUPABASE_ANON_KEY</div>
+            <div>VITE_AUTH_EMAIL_DOMAIN</div>
+          </div>
+        </div>
       </div>
     </main>
   );
