@@ -438,18 +438,25 @@ function BottomNav({ onOpenProfile }) {
   return (
     <nav className="sticky bottom-0 z-40 grid grid-cols-4 border-t border-white/8 bg-[#0a0f17]/95 px-2 py-2 backdrop-blur md:hidden">
       {[
-        ["Зал", <Grid2X2 size={21} />],
-        ["Брони", <CalendarDays size={21} />],
-        ["Клиенты", <UsersRound size={21} />],
-        ["Профиль", <UserRound size={21} />],
-      ].map(([label, icon], index) => (
+        { label: "Зал", icon: <Grid2X2 size={21} />, active: true },
+        { label: "Брони", icon: <CalendarDays size={21} />, disabled: true },
+        { label: "Клиенты", icon: <UsersRound size={21} />, disabled: true },
+        { label: "Профиль", icon: <UserRound size={21} />, onClick: onOpenProfile },
+      ].map((item) => (
         <button
-          key={label}
-          onClick={label === "Профиль" ? onOpenProfile : undefined}
-          className={`flex flex-col items-center gap-1 rounded-xl py-2 text-xs ${index === 0 ? "bg-white/[.055] text-violet-400" : "text-slate-500"}`}
+          key={item.label}
+          disabled={item.disabled}
+          onClick={item.onClick}
+          className={`flex flex-col items-center gap-1 rounded-xl py-2 text-xs ${
+            item.active
+              ? "bg-white/[.055] text-violet-400"
+              : item.disabled
+                ? "cursor-not-allowed text-slate-700"
+                : "text-slate-500"
+          }`}
         >
-          {icon}
-          {label}
+          {item.icon}
+          {item.label}
         </button>
       ))}
     </nav>
